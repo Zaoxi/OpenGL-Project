@@ -120,7 +120,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DrawingManager.cpp" />
+    <ClCompile Include="DrawingObject.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="ViewController.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DrawingManager.h" />
+    <ClInclude Include="DrawingObject.h" />
+    <ClInclude Include="ViewController.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
