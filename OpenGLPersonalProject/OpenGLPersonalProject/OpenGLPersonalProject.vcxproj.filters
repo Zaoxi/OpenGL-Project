@@ -18,13 +18,13 @@
     <ClCompile Include="main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="DrawingObject.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="ViewController.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="DrawingManager.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="DrawingObject.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
