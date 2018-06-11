@@ -1,10 +1,25 @@
-#include <GL/glut.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
 #include "DrawingManager.h"
 
 #define WINDOW_WIDTH 500
 #define WINDOW_HEIGHT 500
+
+void DisplayFunc()
+{
+	DrawingManager::GetInstance()->GetDrawingObject()->MyDisplayFunc();
+}
+void ReshapeFunc(int w, int h)
+{
+	DrawingManager::GetInstance()->GetViewController()->ReshapeFunc(w, h);
+}
+void KeyboardFunc(unsigned char key, int x, int y)
+{
+	DrawingManager::GetInstance()->GetViewController()->KeyboardFunc(key, x, y);
+}
+void MousePassiveFunc(int x, int y)
+{
+	//DrawingManager::GetInstance()->GetViewController()->MousePassiveFunc(x, y);
+}
+
 
 int main(int argc, char ** argv)
 {
@@ -14,10 +29,10 @@ int main(int argc, char ** argv)
 	glutInitWindowPosition(0, 0);
 	glutCreateWindow("My Project");
 
-	glutDisplayFunc((DrawingManager::GetInstance()->GetDrawingObject())->MyDisplayFunc);
-	glutKeyboardFunc((DrawingManager::GetInstance()->GetViewController())->KeyboardFunc);
-	glutReshapeFunc((DrawingManager::GetInstance()->GetViewController())->ReshapeFunc);
-	glutPassiveMotionFunc((DrawingManager::GetInstance()->GetViewController())->MousePassiveFunc);
+	glutDisplayFunc(DisplayFunc);
+	glutKeyboardFunc(KeyboardFunc);
+	glutReshapeFunc(ReshapeFunc);
+	glutPassiveMotionFunc(MousePassiveFunc);
 	glutMainLoop();
 	return 0;
 }
