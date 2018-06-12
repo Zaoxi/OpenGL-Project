@@ -10,6 +10,8 @@
 #define WALL_SIDE_HEIGHT 1600
 #define WALL_FRONT_BACK_WIDTH 800
 #define WALL_FRONT_BACK_HEIGHT 400
+#define DESK_WIDTH 64
+#define DESK_HEIGHT 32
 
 
 class DrawingObject
@@ -19,10 +21,12 @@ private :
 	GLuint wallSideTex;
 	GLuint wallFrontBackTex;
 	GLuint ceilTex;
+	GLuint deskTex;
 	GLubyte floorImage[FLOOR_HEIGHT][FLOOR_WIDTH][4];
 	GLubyte wallSideImage[WALL_SIDE_HEIGHT][WALL_SIDE_WIDTH][4];
 	GLubyte wallFrontBackImage[WALL_FRONT_BACK_HEIGHT][WALL_FRONT_BACK_WIDTH][4];
 	GLubyte ceilImage[FLOOR_HEIGHT][FLOOR_WIDTH][4];
+	GLubyte deskImage[DESK_HEIGHT][DESK_WIDTH][4];
 
 	GLfloat lightPosition0[4] = { 0.0f, 50.0f, 0.0f, 1.0f };
 	GLfloat lightPosition1[4] = { 0.0f, 50.0f, 105.0f, 1.0f };
@@ -42,11 +46,12 @@ private :
 	void makeWallSideImage(GLubyte image[][WALL_SIDE_WIDTH][4]);
 	void makeWallFrontBackImage(GLubyte image[][WALL_FRONT_BACK_WIDTH][4]);
 	void makeCeilImage(GLubyte image[][FLOOR_WIDTH][4]);
-
+	void makeDeskImage(GLubyte image[][DESK_WIDTH][4]);
 
 	void drawRoom();
 	void drawLight();
 	void drawDesk();
+	void drawArrangedDesk();
 	void drawChair();
 	void drawScreen();
 	void drawWindow();
