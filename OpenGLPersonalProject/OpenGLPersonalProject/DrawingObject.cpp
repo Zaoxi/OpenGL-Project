@@ -184,6 +184,7 @@ void DrawingObject::MyDisplayFunc()
 	//drawLight();
 	drawRoom();
 	drawArrangedDesk();
+	drawBoard();
 	//drawChair();
 	//drawScreen();
 	//drawWindow();
@@ -220,9 +221,10 @@ void DrawingObject::drawArrangedDesk()
 		glPopMatrix();
 	}
 	glPopMatrix();
+
+	glLoadIdentity();
 	// 첫번째 가운데 줄
-	glTranslatef(30.0f, -20.0f, 60.0f);
-	glTranslatef(-30.0f, 0.0f, 0.0f);
+	glTranslatef(5.0f, -20.0f, 60.0f);
 	drawDesk();
 	glPushMatrix();
 
@@ -242,9 +244,12 @@ void DrawingObject::drawArrangedDesk()
 		glPopMatrix();
 	}
 	glPopMatrix();
+
+	glLoadIdentity();
+	glPushMatrix();
+
 	// 첫번째 오른쪽 줄??
-	glTranslatef(30.0f, -20.0f, 60.0f);
-	glTranslatef(-50.0f, 0.0f, 0.0f);
+	glTranslatef(-20.0f, -20.0f, 60.0f);
 	drawDesk();
 	glPushMatrix();
 
@@ -266,8 +271,23 @@ void DrawingObject::drawArrangedDesk()
 	glPopMatrix();
 }
 
+void DrawingObject::drawBoard()
+{
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glColor3f(1.0, 1.0, 1.0);
+
+	glBegin(GL_QUADS);
+	glVertex3f(-25.0f, -10.0f, 79.0f);
+	glVertex3f(25.0f, -10.0f, 79.0f);
+	glVertex3f(25.0f, 10.0f, 79.0f); 
+	glVertex3f(-25.0f, 10.0f, 79.0f);
+	glEnd();
+}
+
 void DrawingObject::drawDesk()
 {
+
 	glColor3f(1.0, 1.0, 1.0);
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, deskTex);

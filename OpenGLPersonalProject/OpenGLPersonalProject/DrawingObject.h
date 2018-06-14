@@ -54,8 +54,8 @@ private :
 	void drawArrangedDesk();
 	void drawChair();
 	void drawScreen();
-	void drawWindow();
 	void drawBoard();
+	void drawWindow();
 	void drawDoor();
 public :
 	DrawingObject();
