@@ -1,2 +1,3 @@
 ﻿  DrawingObject.cpp
+d:\project\openglproject\opengl-project\openglpersonalproject\openglpersonalproject\drawingobject.cpp(957): warning C4305: '인수': 'double'에서 'GLfloat'(으)로 잘립니다.
   OpenGLPersonalProject.vcxproj -> D:\Project\OpenGLProject\OpenGL-Project\OpenGLPersonalProject\x64\Debug\OpenGLPersonalProject.exe

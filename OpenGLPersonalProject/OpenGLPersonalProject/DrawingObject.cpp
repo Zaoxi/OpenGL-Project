@@ -8,9 +8,7 @@ DrawingObject::DrawingObject()
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glShadeModel(GL_SMOOTH);
 	glEnable(GL_DEPTH_TEST);
-	//glEnable(GL_LIGHTING);
-	//glEnable(GL_LIGHT0);
-	//glEnable(GL_LIGHT1);
+	glEnable(GL_LIGHTING);
 	//glDepthMask(GL_TRUE);
 
 	// For Creating texture Objects
@@ -24,6 +22,7 @@ DrawingObject::DrawingObject()
 	makeScreenImage(screenImage);
 	makeDoorImage(doorImage);
 	makeBackStandImage(standImage);
+	makeBlackImage(blackImage);
 
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	glGenTextures(1, &floorTex);
@@ -32,7 +31,7 @@ DrawingObject::DrawingObject()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); // maximum
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); // minimum
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL/**/);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE/**/);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, FLOOR_WIDTH, FLOOR_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, floorImage);
 
 	glGenTextures(1, &ceilTex);
@@ -41,7 +40,7 @@ DrawingObject::DrawingObject()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); // maximum
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); // minimum
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL/**/);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE/**/);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, FLOOR_WIDTH, FLOOR_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, ceilImage);
 
 	glGenTextures(1, &wallSideTex);
@@ -50,7 +49,7 @@ DrawingObject::DrawingObject()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); // maximum
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); // minimum
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL/**/);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE/**/);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, WALL_SIDE_WIDTH, WALL_SIDE_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, wallSideImage);
 
 	glGenTextures(1, &wallFrontBackTex);
@@ -59,7 +58,7 @@ DrawingObject::DrawingObject()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); // maximum
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); // minimum
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL/**/);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE/**/);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, WALL_FRONT_BACK_WIDTH, WALL_FRONT_BACK_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, wallFrontBackImage);
 
 	glGenTextures(1, &deskTex);
@@ -68,7 +67,7 @@ DrawingObject::DrawingObject()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); // maximum
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); // minimum
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL/**/);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE/**/);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, DESK_WIDTH, DESK_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, deskImage);
 
 	glGenTextures(1, &boardTex);
@@ -77,7 +76,7 @@ DrawingObject::DrawingObject()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); // maximum
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); // minimum
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL/**/);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE/**/);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, BOARD_WIDTH, BOARD_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, boardImage);
 
 	glGenTextures(1, &windowTex);
@@ -95,7 +94,7 @@ DrawingObject::DrawingObject()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); // maximum
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); // minimum
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL/**/);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE/**/);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, SCREEN_WIDTH, SCREEN_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, screenImage);
 
 	glGenTextures(1, &doorTex);
@@ -104,7 +103,7 @@ DrawingObject::DrawingObject()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); // maximum
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); // minimum
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL/**/);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE/**/);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, DOOR_WIDTH, DOOR_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, doorImage);
 
 	glGenTextures(1, &standTex);
@@ -113,9 +112,17 @@ DrawingObject::DrawingObject()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); // maximum
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); // minimum
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL/**/);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE/**/);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, STAND_WIDTH, STAND_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, standImage);
-
+	
+	glGenTextures(1, &blackTex);
+	glBindTexture(GL_TEXTURE_2D, blackTex);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); // maximum
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); // minimum
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE/**/);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, BLACK_WIDTH, BLACK_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, blackImage);
 }
 
 void DrawingObject::makeFloorImage(GLubyte image[][FLOOR_WIDTH][4])
@@ -135,7 +142,7 @@ void DrawingObject::makeFloorImage(GLubyte image[][FLOOR_WIDTH][4])
 			image[i][j][0] = (GLubyte)c;
 			image[i][j][1] = (GLubyte)c;
 			image[i][j][2] = (GLubyte)c;
-			image[i][j][3] = (GLubyte)255;
+			image[i][j][3] = (GLubyte)30;
 		}
 	}
 }
@@ -151,7 +158,7 @@ void DrawingObject::makeCeilImage(GLubyte image[][FLOOR_WIDTH][4])
 			image[i][j][0] = (GLubyte)c;
 			image[i][j][1] = (GLubyte)c;
 			image[i][j][2] = (GLubyte)c;
-			image[i][j][3] = (GLubyte)255;
+			image[i][j][3] = (GLubyte)30;
 		}
 	}
 }
@@ -173,7 +180,7 @@ void DrawingObject::makeWallSideImage(GLubyte image[][WALL_SIDE_WIDTH][4])
 			image[i][j][0] = (GLubyte)c;
 			image[i][j][1] = (GLubyte)c;
 			image[i][j][2] = (GLubyte)c;
-			image[i][j][3] = (GLubyte)255;
+			image[i][j][3] = (GLubyte)30;
 		}
 	}
 }
@@ -196,7 +203,7 @@ void DrawingObject::makeWallFrontBackImage(GLubyte image[][WALL_FRONT_BACK_WIDTH
 			image[i][j][0] = (GLubyte)c;
 			image[i][j][1] = (GLubyte)c;
 			image[i][j][2] = (GLubyte)c;
-			image[i][j][3] = (GLubyte)255;
+			image[i][j][3] = (GLubyte)30;
 		}
 	}
 }
@@ -219,7 +226,7 @@ void DrawingObject::makeBoardImage(GLubyte image[][BOARD_WIDTH][4])
 			image[i][j][0] = (GLubyte)c;
 			image[i][j][1] = (GLubyte)c;
 			image[i][j][2] = (GLubyte)c;
-			image[i][j][3] = (GLubyte)255;
+			image[i][j][3] = (GLubyte)30;
 		}
 	}
 }
@@ -258,7 +265,7 @@ void DrawingObject::makeDeskImage(GLubyte image[][DESK_WIDTH][4])
 			image[i][j][0] = (GLubyte)color[c][0];
 			image[i][j][1] = (GLubyte)color[c][1];
 			image[i][j][2] = (GLubyte)color[c][2];
-			image[i][j][3] = (GLubyte)255;
+			image[i][j][3] = (GLubyte)30;
 		}
 	}
 }
@@ -342,7 +349,7 @@ void DrawingObject::makeDoorImage(GLubyte image[][DOOR_WIDTH][4])
 			image[i][j][0] = (GLubyte)c;
 			image[i][j][1] = (GLubyte)c;
 			image[i][j][2] = (GLubyte)c;
-			image[i][j][3] = (GLubyte)255;
+			image[i][j][3] = (GLubyte)30;
 		}
 	}
 }
@@ -371,7 +378,21 @@ void DrawingObject::makeBackStandImage(GLubyte image[][STAND_WIDTH][4])
 			image[i][j][0] = (GLubyte)color[0];
 			image[i][j][1] = (GLubyte)color[1];
 			image[i][j][2] = (GLubyte)color[2];
-			image[i][j][3] = (GLubyte)255;
+			image[i][j][3] = (GLubyte)30;
+		}
+	}
+}
+
+void DrawingObject::makeBlackImage(GLubyte image[][BLACK_WIDTH][4])
+{
+	int i, j;
+
+	for (i = 0; i < BLACK_HEIGHT; i++) {
+		for (j = 0; j < BLACK_WIDTH; j++) {
+			image[i][j][0] = 0;
+			image[i][j][1] = 0;
+			image[i][j][2] = 0;
+			image[i][j][3] = 255;
 		}
 	}
 }
@@ -397,7 +418,6 @@ void DrawingObject::MyDisplayFunc()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	DrawingManager::GetInstance()->GetViewController()->SetView();
-	//drawLight();
 	drawRoom();
 	drawArrangedDesk();
 	drawBoard();
@@ -408,6 +428,7 @@ void DrawingObject::MyDisplayFunc()
 	drawProjector();
 	drawArrangedMonitor();
 	drawBackStand();
+	drawProf();
 
 	glutSwapBuffers();
 }
@@ -417,7 +438,7 @@ void DrawingObject::drawBackStand()
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	glColor3f(1.0f, 1.0f, 1.0f);
+	glColor3f(0.0f, 0.0f, 0.0f);
 	
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, standTex);
@@ -447,7 +468,7 @@ void DrawingObject::drawScreen()
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	glColor3f(1.0f, 1.0f, 1.0f);
+	glColor3f(0.0f, 0.0f, 0.0f);
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, screenTex);
 
@@ -466,7 +487,7 @@ void DrawingObject::drawDoor()
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	glColor3f(1.0f, 1.0f, 1.0f);
+	glColor3f(0.0f, 0.0f, 0.0f);
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, doorTex);
 
@@ -617,7 +638,7 @@ void DrawingObject::drawWindow()
 	//glVertex3f(1.0f, 1.5f, 0.0f);
 	//glEnd();
 
-	glColor3f(1.0f, 1.0f, 1.0f);
+	glColor3f(0.0f, 0.0f, 0.0f);
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, windowTex);
 
@@ -753,29 +774,32 @@ void DrawingObject::drawMonitor()
 
 	glDisable(GL_TEXTURE_2D);
 
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, blackTex);
+
 	glBegin(GL_QUADS);
 	// ¿ÞÂÊ¸é
-	glVertex3f(0.0f, 5.0f, 0.5f);
-	glVertex3f(0.0f, 0.0f, 0.5f);
-	glVertex3f(0.0f, 0.0f, 0.0f);
-	glVertex3f(0.0f, 5.0f, 0.0f);
+	glTexCoord2d(0, 1); glVertex3f(0.0f, 5.0f, 0.5f);
+	glTexCoord2d(0, 0); glVertex3f(0.0f, 0.0f, 0.5f);
+	glTexCoord2d(1, 0); glVertex3f(0.0f, 0.0f, 0.0f);
+	glTexCoord2d(1, 1); glVertex3f(0.0f, 5.0f, 0.0f);
 	// À­¸é
-	glVertex3f(5.0f, 5.0f, 0.5f);
-	glVertex3f(0.0f, 5.0f, 0.5f);
-	glVertex3f(0.0f, 5.0f, 0.0f);
-	glVertex3f(5.0f, 5.0f, 0.0f);
+	glTexCoord2d(0, 1); glVertex3f(5.0f, 5.0f, 0.5f);
+	glTexCoord2d(0, 0); glVertex3f(0.0f, 5.0f, 0.5f);
+	glTexCoord2d(1, 0); glVertex3f(0.0f, 5.0f, 0.0f);
+	glTexCoord2d(1, 1); glVertex3f(5.0f, 5.0f, 0.0f);
 	// ¿À¸¥ÂÊ¸é
-	glVertex3f(5.0f, 5.0f, 0.0f);
-	glVertex3f(5.0f, 0.0f, 0.0f);
-	glVertex3f(5.0f, 0.0f, 0.5f);
-	glVertex3f(5.0f, 5.0f, 0.5f);
+	glTexCoord2d(0, 1); glVertex3f(5.0f, 5.0f, 0.0f);
+	glTexCoord2d(0, 0); glVertex3f(5.0f, 0.0f, 0.0f);
+	glTexCoord2d(1, 0); glVertex3f(5.0f, 0.0f, 0.5f);
+	glTexCoord2d(1, 1); glVertex3f(5.0f, 5.0f, 0.5f);
 	// µÞ¸é
-	glVertex3f(0.0f, 5.0f, 0.5f);
-	glVertex3f(0.0f, 0.0f, 0.5f);
-	glVertex3f(5.0f, 0.0f, 0.5f);
-	glVertex3f(5.0f, 5.0f, 0.5f);
+	glTexCoord2d(0, 1); glVertex3f(0.0f, 5.0f, 0.5f);
+	glTexCoord2d(0, 0); glVertex3f(0.0f, 0.0f, 0.5f);
+	glTexCoord2d(1, 0); glVertex3f(5.0f, 0.0f, 0.5f);
+	glTexCoord2d(1, 1); glVertex3f(5.0f, 5.0f, 0.5f);
 	glEnd();
-
+	glDisable(GL_TEXTURE_2D);
 	glColor3f(0.9f, 0.9f, 0.9f);
 	glTranslatef(2.5f, 1.0f, 0.5f);
 	glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
@@ -787,7 +811,7 @@ void DrawingObject::drawBoard()
 {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	glColor3f(1.0, 1.0, 1.0);
+	glColor3f(0.0f, 0.0f, 0.0f);
 
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, boardTex);
@@ -805,7 +829,7 @@ void DrawingObject::drawBoard()
 void DrawingObject::drawDesk()
 {
 
-	glColor3f(1.0, 1.0, 1.0);
+	glColor3f(0.0f, 0.0f, 0.0f);
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, deskTex);
 	glBegin(GL_QUADS);
@@ -836,40 +860,12 @@ void DrawingObject::drawDesk()
 
 }
 
-void DrawingObject::drawLight()
-{
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-
-	// ºûÀÇ À§Ä¡ ¼³Á¤
-	glLightfv(GL_LIGHT0, GL_POSITION, lightPosition0);
-	glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, lightDirection);
-	glLightfv(GL_LIGHT0, GL_SPOT_CUTOFF, lightSpotAngle);
-	glLightf(GL_LIGHT0, GL_SPOT_EXPONENT, 1.0f);
-
-	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
-	glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
-
-	glLightfv(GL_LIGHT1, GL_POSITION, lightPosition1);
-	glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, lightDirection);
-	glLightfv(GL_LIGHT1, GL_SPOT_CUTOFF, lightSpotAngle);
-	glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 1.0f);
-
-	glLightfv(GL_LIGHT1, GL_AMBIENT, light_ambient);
-	glLightfv(GL_LIGHT1, GL_DIFFUSE, light_diffuse);
-	glLightfv(GL_LIGHT1, GL_SPECULAR, light_specular);
-
-	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, global_ambient);
-	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
-}
-
 void DrawingObject::drawRoom()
 {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	glColor3f(1.0, 1.0, 1.0);
+	glColor3f(0.0f, 0.0f, 0.0f);
 
 	glPushMatrix();
 
@@ -923,5 +919,56 @@ void DrawingObject::drawRoom()
 	glEnd();
 	glDisable(GL_TEXTURE_2D);
 
+	glPopMatrix();
+}
+
+
+
+void DrawingObject::drawProf()
+{
+	GLUquadricObj  *qobj;
+	qobj = gluNewQuadric();
+	gluQuadricDrawStyle(qobj, GLU_FILL);
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+	glPushMatrix();
+	glTranslatef(0.0f, -11.0f, 0.0f);
+	glPushMatrix();
+	// ¾ó±¼, ¸ö
+	glutSolidSphere(1.0f, 50, 50);
+	glTranslatef(0.0f, -1.0f, 0.0f);
+	glPushMatrix();
+	glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
+	gluCylinder(qobj, 0.5, 0.5, 4.0, 20, 5);
+	glPopMatrix();
+	// ¿ÞÆÈ
+	glPushMatrix();
+	glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
+	glRotatef(70.0f, 1.0f, 0.0f, 0.0f);
+	gluCylinder(qobj, 0.3, 0.3, 4.0, 20, 5);
+	glPopMatrix();
+	// ¿À¸¥ÆÈ
+	glPushMatrix();
+	glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
+	glRotatef(110.0f, 1.0f, 0.0f, 0.0f);
+	gluCylinder(qobj, 0.3, 0.3, 4.0, 20, 5);
+	glPopMatrix();
+
+	glTranslatef(0.05, -4.0f, 0.0f);
+	glPushMatrix();
+	glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
+	glRotatef(80.0f, 1.0f, 0.0f, 0.0f);
+	gluCylinder(qobj, 0.3, 0.3, 4.0, 20, 5);
+	glPopMatrix();
+
+	glPushMatrix();
+	glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
+	glRotatef(100.0f, 1.0f, 0.0f, 0.0f);
+	gluCylinder(qobj, 0.3, 0.3, 4.0, 20, 5);
+	glPopMatrix();
+
+	glPopMatrix();
 	glPopMatrix();
 }

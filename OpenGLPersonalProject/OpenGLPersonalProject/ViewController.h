@@ -10,7 +10,8 @@ class ViewController
 {
 private :
 	GLfloat intensity = 0.0f;
-	GLfloat lightPosition0[4] = { 0.0f, 10.0f, 0.0f, 1.0f };
+	GLfloat lightPosition[4] = { 0.0f, -10.0f, 0.0f, 1.0f };
+	GLfloat lightDirection[3] = { 0.0f, -0.5f, 1.0f };
 	int window_width = 500, window_height = 500;
 	GLfloat rotation = 0.0f;
 	GLfloat fov = 100.0f;

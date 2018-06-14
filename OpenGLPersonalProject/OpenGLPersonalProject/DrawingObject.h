@@ -22,6 +22,8 @@
 #define DOOR_HEIGHT 32
 #define STAND_WIDTH 32
 #define STAND_HEIGHT 16
+#define BLACK_WIDTH 2
+#define BLACK_HEIGHT 2
 
 class DrawingObject
 {
@@ -37,6 +39,7 @@ private :
 	GLuint doorTex;
 	GLuint monitorTex;
 	GLuint standTex;
+	GLuint blackTex;
 
 	GLubyte floorImage[FLOOR_HEIGHT][FLOOR_WIDTH][4];
 	GLubyte wallSideImage[WALL_SIDE_HEIGHT][WALL_SIDE_WIDTH][4];
@@ -48,6 +51,7 @@ private :
 	GLubyte screenImage[SCREEN_HEIGHT][SCREEN_WIDTH][4];
 	GLubyte doorImage[DOOR_HEIGHT][DOOR_WIDTH][4];
 	GLubyte standImage[STAND_HEIGHT][STAND_WIDTH][4];
+	GLubyte blackImage[BLACK_HEIGHT][BLACK_WIDTH][4];
 
 	GLfloat lightPosition0[4] = { 0.0f, 50.0f, 0.0f, 1.0f };
 	GLfloat lightPosition1[4] = { 0.0f, 50.0f, 105.0f, 1.0f };
@@ -73,9 +77,9 @@ private :
 	void makeScreenImage(GLubyte image[][SCREEN_WIDTH][4]);
 	void makeDoorImage(GLubyte image[][DOOR_WIDTH][4]);
 	void makeBackStandImage(GLubyte image[][STAND_WIDTH][4]);
+	void makeBlackImage(GLubyte image[][BLACK_WIDTH][4]);
 
 	void drawRoom();
-	void drawLight();
 	void drawDesk();
 	void drawArrangedDesk();
 	void arrangeDesk();
@@ -92,7 +96,8 @@ private :
 	void drawArrangedMonitor();
 	void arrangeMonitor();
 	void drawBackStand();
-	
+	void drawProf();
+	void drawMovingProf();
 public :
 	DrawingObject();
 

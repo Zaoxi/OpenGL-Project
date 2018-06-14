@@ -10,6 +10,14 @@ ViewController::ViewController()
 {
 	focusX = sinf(rotation * PI / 180.0f);
 	focusZ = -cosf(rotation * PI / 180.0f);
+	lightDirection[0] = focusX;
+	lightDirection[2] = focusZ;
+
+	glEnable(GL_LIGHT0);
+	glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
+	glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, lightDirection);
+	glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, 30.0);
+	glLightf(GL_LIGHT0, GL_SPOT_EXPONENT, 0.2f);
 }
 
 void ViewController::ReshapeFunc(int w, int h)
@@ -27,6 +35,10 @@ void ViewController::SetView()
 {
 	focusX = sinf(rotation * PI / 180.0f);
 	focusZ = -cosf(rotation * PI / 180.0f);
+	lightDirection[0] = focusX;
+	lightDirection[2] = focusZ;
+	glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
+	glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, lightDirection);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluPerspective(fov, (GLfloat)window_width / (GLfloat)window_height, 1.0, 500.0);
@@ -36,7 +48,7 @@ void ViewController::SetView()
 void ViewController::KeyboardFunc(unsigned char key, int x, int y)
 {
 	GLfloat termX, termZ;
-
+	GLfloat newPositionX, newPositionZ;
 	switch (key)
 	{
 	case 'd': case 'D':
@@ -60,15 +72,31 @@ void ViewController::KeyboardFunc(unsigned char key, int x, int y)
 	case 'w': case 'W':
 		termX = WALK_DISTANCE * sinf(-rotation * PI / 180.0f);
 		termZ = WALK_DISTANCE * cosf(-rotation * PI / 180.0f);
-		positionX -= termX;
-		positionZ -= termZ;
+		newPositionX = positionX - termX;
+		newPositionZ = positionZ - termZ;
+		if (newPositionX <= -37.0f || newPositionX >= 37.0f || newPositionZ <= -77.0f || newPositionZ >= 77.0f)
+		{
+			break;
+		}
+		positionX = newPositionX;
+		positionZ = newPositionZ;
+		lightPosition[0] = newPositionX;
+		lightPosition[2] = newPositionZ;
 		glutPostRedisplay();
 		break;
 	case 's': case 'S':
 		termX = WALK_DISTANCE * sinf(-rotation * PI / 180.0f);
 		termZ = WALK_DISTANCE * cosf(-rotation * PI / 180.0f);
-		positionX += termX;
-		positionZ += termZ;
+		newPositionX = positionX + termX;
+		newPositionZ = positionZ + termZ;
+		if (newPositionX <= -37.0f || newPositionX >= 37.0f || newPositionZ <= -77.0f || newPositionZ >= 77.0f)
+		{
+			break;
+		}
+		positionX = newPositionX;
+		positionZ = newPositionZ;
+		lightPosition[0] = newPositionX;
+		lightPosition[2] = newPositionZ;
 		glutPostRedisplay();
 	default:
 		break;
