@@ -20,6 +20,14 @@ void MousePassiveFunc(int x, int y)
 	//DrawingManager::GetInstance()->GetViewController()->MousePassiveFunc(x, y);
 }
 
+void TimerFunc(int value)
+{
+	DrawingManager::GetInstance()->GetDrawingObject()->MyAnimation();
+
+	glutPostRedisplay();
+	glutTimerFunc(300, TimerFunc, value);
+}
+
 
 int main(int argc, char ** argv)
 {
@@ -33,6 +41,7 @@ int main(int argc, char ** argv)
 	glutKeyboardFunc(KeyboardFunc);
 	glutReshapeFunc(ReshapeFunc);
 	glutPassiveMotionFunc(MousePassiveFunc);
+	glutTimerFunc(300, TimerFunc, 1);
 	glutMainLoop();
 	return 0;
 }

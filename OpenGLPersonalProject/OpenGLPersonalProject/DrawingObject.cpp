@@ -1,6 +1,7 @@
 
 #include "DrawingManager.h"
-
+#include <iostream>
+using namespace std;
 // Object, Lighting, Texture 등 초기화
 DrawingObject::DrawingObject()
 {
@@ -18,6 +19,11 @@ DrawingObject::DrawingObject()
 	makeWallSideImage(wallSideImage);
 	makeWallFrontBackImage(wallFrontBackImage);
 	makeDeskImage(deskImage);
+	makeBoardImage(boardImage);
+	makeWindowImage(windowImage);
+	makeScreenImage(screenImage);
+	makeDoorImage(doorImage);
+	makeBackStandImage(standImage);
 
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	glGenTextures(1, &floorTex);
@@ -64,6 +70,52 @@ DrawingObject::DrawingObject()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); // minimum
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL/**/);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, DESK_WIDTH, DESK_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, deskImage);
+
+	glGenTextures(1, &boardTex);
+	glBindTexture(GL_TEXTURE_2D, boardTex);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); // maximum
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); // minimum
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL/**/);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, BOARD_WIDTH, BOARD_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, boardImage);
+
+	glGenTextures(1, &windowTex);
+	glBindTexture(GL_TEXTURE_2D, windowTex);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // maximum
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); // minimum
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL/**/);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, WINDOW_WIDTH, WINDOW_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, windowImage);
+
+	glGenTextures(1, &screenTex);
+	glBindTexture(GL_TEXTURE_2D, screenTex);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); // maximum
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); // minimum
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL/**/);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, SCREEN_WIDTH, SCREEN_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, screenImage);
+
+	glGenTextures(1, &doorTex);
+	glBindTexture(GL_TEXTURE_2D, doorTex);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); // maximum
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); // minimum
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL/**/);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, DOOR_WIDTH, DOOR_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, doorImage);
+
+	glGenTextures(1, &standTex);
+	glBindTexture(GL_TEXTURE_2D, standTex);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); // maximum
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); // minimum
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL/**/);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, STAND_WIDTH, STAND_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, standImage);
+
 }
 
 void DrawingObject::makeFloorImage(GLubyte image[][FLOOR_WIDTH][4])
@@ -149,6 +201,29 @@ void DrawingObject::makeWallFrontBackImage(GLubyte image[][WALL_FRONT_BACK_WIDTH
 	}
 }
 
+void DrawingObject::makeBoardImage(GLubyte image[][BOARD_WIDTH][4])
+{
+	int i, j, c;
+
+	for (i = 0; i < BOARD_HEIGHT; i++) {
+		for (j = 0; j < BOARD_WIDTH; j++) {
+			if (i < 1 || i > BOARD_HEIGHT - 2 || j < 2 || j > BOARD_WIDTH - 3)
+			{
+				c = 96;
+			}
+			else
+			{
+				c = 255;
+			}
+
+			image[i][j][0] = (GLubyte)c;
+			image[i][j][1] = (GLubyte)c;
+			image[i][j][2] = (GLubyte)c;
+			image[i][j][3] = (GLubyte)255;
+		}
+	}
+}
+
 void DrawingObject::makeDeskImage(GLubyte image[][DESK_WIDTH][4])
 {
 	int i, j, c;
@@ -165,15 +240,156 @@ void DrawingObject::makeDeskImage(GLubyte image[][DESK_WIDTH][4])
 	{ 255, 181, 108 },
 	{ 255, 181, 108 } };
 
+	int color[8][3] = 
+	{
+	{230, 230, 230},
+	{150, 150, 150},
+	{160, 160, 160},
+	{170, 170, 170},
+	{180, 180, 180},
+	{190, 190, 190},
+	{190, 190, 190},
+	{230, 230, 230}
+	};
+
 	for (i = 0; i < DESK_HEIGHT; i++) {
 		for (j = 0; j < DESK_WIDTH; j++) {
-			c = rand() % 11;
-			image[i][j][0] = (GLubyte)brown[c][0];
-			image[i][j][1] = (GLubyte)brown[c][1];
-			image[i][j][2] = (GLubyte)brown[c][2];
+			c = rand() % 8;
+			image[i][j][0] = (GLubyte)color[c][0];
+			image[i][j][1] = (GLubyte)color[c][1];
+			image[i][j][2] = (GLubyte)color[c][2];
 			image[i][j][3] = (GLubyte)255;
 		}
 	}
+}
+
+void DrawingObject::makeWindowImage(GLubyte image[][WINDOW_WIDTH][4])
+{
+	int i, j;
+	GLubyte color[3];
+
+	for (i = 0; i < WINDOW_HEIGHT; i++) {
+		for (j = 0; j < WINDOW_WIDTH; j++) {
+			// 하늘색 배경
+			color[0] = (GLubyte)0;
+			color[1] = (GLubyte)128;
+			color[2] = (GLubyte)255;
+			// 나무 줄기
+			if (i < WINDOW_HEIGHT / 2 - 9 && j > WINDOW_WIDTH / 2 - 2 && j < WINDOW_WIDTH / 2 + 2)
+			{
+				color[0] = (GLubyte)162;
+				color[1] = (GLubyte)70;
+				color[2] = (GLubyte)0;
+			} // 나뭇잎
+			else if (i > WINDOW_HEIGHT / 2 - 10 && i < WINDOW_HEIGHT / 2 + 14)
+			{
+				color[0] = (GLubyte)0;
+				color[1] = (GLubyte)196;
+				color[2] = (GLubyte)52;
+			} // 철창살
+			if (i < 2 || i > WINDOW_HEIGHT - 3 || j < 2 || j > WINDOW_WIDTH - 3 || j % 6 < 3)
+			{
+				color[0] = (GLubyte)96;
+				color[1] = (GLubyte)96;
+				color[2] = (GLubyte)96;
+			}
+
+			image[i][j][0] = (GLubyte)color[0];
+			image[i][j][1] = (GLubyte)color[1];
+			image[i][j][2] = (GLubyte)color[2];
+			image[i][j][3] = (GLubyte)255;
+		}
+	}
+}
+
+void DrawingObject::makeScreenImage(GLubyte image[][SCREEN_WIDTH][4])
+{
+	int i, j, c;
+
+	for (i = 0; i < SCREEN_HEIGHT; i++) {
+		for (j = 0; j < SCREEN_WIDTH; j++) {
+			c = 210;
+
+			if (i > 9 && i < SCREEN_HEIGHT - 10 && j > 5 && j < SCREEN_WIDTH - 6)
+			{
+				c = rand() % 255;
+			}
+			else if (i < 3)
+			{
+				c = 85;
+			}
+			image[i][j][0] = (GLubyte)c;
+			image[i][j][1] = (GLubyte)c;
+			image[i][j][2] = (GLubyte)c;
+			image[i][j][3] = (GLubyte)255;
+		}
+	}
+}
+
+void DrawingObject::makeDoorImage(GLubyte image[][DOOR_WIDTH][4])
+{
+	int i, j, c;
+
+	for (i = 0; i < DOOR_HEIGHT; i++) {
+		for (j = 0; j < DOOR_WIDTH; j++) {
+			c = 120;
+
+			if (i == DOOR_HEIGHT / 2 && j < DOOR_WIDTH - 1 && j > DOOR_WIDTH / 2 + 1)
+			{
+				c = 40;
+			}
+			
+			image[i][j][0] = (GLubyte)c;
+			image[i][j][1] = (GLubyte)c;
+			image[i][j][2] = (GLubyte)c;
+			image[i][j][3] = (GLubyte)255;
+		}
+	}
+}
+
+void DrawingObject::makeBackStandImage(GLubyte image[][STAND_WIDTH][4])
+{
+	int i, j;
+	GLubyte color[3] = { 0 };
+
+	for (i = 0; i < STAND_HEIGHT; i++) {
+		for (j = 0; j < STAND_WIDTH; j++) {
+			if (i < 1 || i > STAND_HEIGHT - 2 || j < 2 || j > STAND_WIDTH - 3)
+			{
+				color[0] = 210;
+				color[1] = 210;
+				color[2] = 210;
+			}
+			else
+			{
+				color[0] = 0;
+				color[1] = 200;
+				color[2] = 240;
+			}
+			
+
+			image[i][j][0] = (GLubyte)color[0];
+			image[i][j][1] = (GLubyte)color[1];
+			image[i][j][2] = (GLubyte)color[2];
+			image[i][j][3] = (GLubyte)255;
+		}
+	}
+}
+
+void DrawingObject::MyAnimation()
+{
+	// 스크린 노이즈 애니메이션
+	makeScreenImage(screenImage);
+	glGenTextures(1, &screenTex);
+	glBindTexture(GL_TEXTURE_2D, screenTex);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // maximum
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); // minimum
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL/**/);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, SCREEN_WIDTH, SCREEN_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, screenImage);
+
+
 }
 
 // glutDisplayFunc()의 패러미터메소드
@@ -185,13 +401,256 @@ void DrawingObject::MyDisplayFunc()
 	drawRoom();
 	drawArrangedDesk();
 	drawBoard();
-	//drawChair();
-	//drawScreen();
-	//drawWindow();
-	//drawBoard();
-	//drawDoor();
+	drawArrangedWindow();
+	drawArrangedChair();
+	drawScreen();
+	drawDoor();
+	drawProjector();
+	drawArrangedMonitor();
+	drawBackStand();
 
 	glutSwapBuffers();
+}
+
+void DrawingObject::drawBackStand()
+{
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+	glColor3f(1.0f, 1.0f, 1.0f);
+	
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, standTex);
+
+	glBegin(GL_QUADS);
+	glTexCoord2d(0, 0); glVertex3f(40.0f, -20.0f, -70.0f);
+	glTexCoord2d(1, 0); glVertex3f(10.0f, -20.0f, -70.0f);
+	glTexCoord2d(1, 1); glVertex3f(10.0f, -5.0f, -70.0f);
+	glTexCoord2d(0, 1); glVertex3f(40.0f, -5.0f, -70.0f);
+	glEnd();
+
+	glDisable(GL_TEXTURE_2D);
+}
+
+void DrawingObject::drawProjector()
+{
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glTranslatef(0.0f, 15.0f, 15.0f);
+	glutSolidCube(2.0f);
+}
+
+void DrawingObject::drawScreen()
+{
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, screenTex);
+
+	glBegin(GL_QUADS);
+	glTexCoord2d(0, 0); glVertex3f(-15.0f, -15.0f, 78.0f);
+	glTexCoord2d(1, 0); glVertex3f(15.0f, -15.0f, 78.0f);
+	glTexCoord2d(1, 1); glVertex3f(15.0f, 20.0f, 78.0f);
+	glTexCoord2d(0, 1); glVertex3f(-15.0f, 20.0f, 78.0f);
+	glEnd();
+
+	glDisable(GL_TEXTURE_2D);
+}
+
+void DrawingObject::drawDoor()
+{
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, doorTex);
+
+	glBegin(GL_QUADS);
+	glTexCoord2d(0, 0); glVertex3f(-39.9f, -20.0f, -75.0f);
+	glTexCoord2d(1, 0); glVertex3f(-39.9f, -20.0f, -65.0f);
+	glTexCoord2d(1, 1); glVertex3f(-39.9f, 10.0f, -65.0f);
+	glTexCoord2d(0, 1); glVertex3f(-39.9f, 10.0f, -75.0f);
+	glEnd();
+
+	glBegin(GL_QUADS);
+	glTexCoord2d(0, 0); glVertex3f(-39.9f, -20.0f, 65.0f);
+	glTexCoord2d(1, 0); glVertex3f(-39.9f, -20.0f, 75.0f);
+	glTexCoord2d(1, 1); glVertex3f(-39.9f, 10.0f, 75.0f);
+	glTexCoord2d(0, 1); glVertex3f(-39.9f, 10.0f, 65.0f);
+	glEnd();
+
+	glDisable(GL_TEXTURE_2D);
+}
+
+void DrawingObject::arrangeChair()
+{
+	glPushMatrix();
+	glScalef(2.0f, 2.0f, 2.0f);
+	drawChair();
+	glPopMatrix();
+	glPushMatrix();
+
+	glTranslatef(-10.0f, 0.0f, 0.0f);
+	glScalef(2.0f, 2.0f, 2.0f);
+	drawChair();
+	glPopMatrix();
+
+	for (int i = 0; i < 8; i++)
+	{
+		glTranslatef(0.0f, 0.0f, -15.0f);
+		glPushMatrix();
+		glScalef(2.0f, 2.0f, 2.0f);
+		drawChair();
+		glPopMatrix();
+		glPushMatrix();
+
+		glTranslatef(-10.0f, 0.0f, 0.0f);
+		glScalef(2.0f, 2.0f, 2.0f);
+		drawChair();
+		glPopMatrix();
+	}
+}
+
+void DrawingObject::drawArrangedChair()
+{
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glPushMatrix();
+	// 왼쪽줄
+	glTranslatef(30.0f, -15.0f, 60.0f);
+	arrangeChair();
+
+	// 중간줄
+	glLoadIdentity();
+
+	glTranslatef(5.0f, -15.0f, 60.0f);
+	arrangeChair();
+	// 오른쪽 줄
+	glLoadIdentity();
+
+	glTranslatef(-20.0f, -15.0f, 60.0f);
+	arrangeChair();
+
+	glLoadIdentity();
+	glPushMatrix();
+	glTranslatef(25.0f, -15.0f, 70.0f);
+	glScalef(2.0f, 2.0f, 2.0f);
+	glRotatef(180.0f, 0.0f, 1.0f, 0.0f);
+	drawChair();
+
+	glPopMatrix();
+}
+
+void DrawingObject::drawChair()
+{	
+	glColor3f(0.0f, 0.0f, 0.0f);
+
+	glBegin(GL_QUADS);
+	glVertex3f(-1.0f, 1.0f, -1.0f);
+	glVertex3f(-1.0f, -1.0f, -1.0f);
+	glVertex3f(1.0f, -1.0f, -1.0f);
+	glVertex3f(1.0f, 1.0f, -1.0f);
+	glEnd();
+
+	glBegin(GL_QUADS);
+	glVertex3f(-1.0f, -1.0f, 1.0f);
+	glVertex3f(-1.0f, -1.0f, -1.0f);
+	glVertex3f(1.0f, -1.0f, -1.0f);
+	glVertex3f(1.0f, -1.0f, 1.0f);
+	glEnd();
+	glLineWidth(5.0f);
+	glBegin(GL_LINES);
+	glVertex3f(0.0f, -1.0f, 0.0f);
+	glVertex3f(0.0f, -2.0f, 0.0f);
+
+	glVertex3f(0.0f, -2.0f, 0.0f);
+	glVertex3f(1.0f, -2.2f, 1.0f);
+
+	glVertex3f(0.0f, -2.0f, 0.0f);
+	glVertex3f(-1.0f, -2.2f, 1.0f);
+
+	glVertex3f(0.0f, -2.0f, 0.0f);
+	glVertex3f(1.0f, -2.2f, -1.0f);
+
+	glVertex3f(0.0f, -2.0f, 0.0f);
+	glVertex3f(-1.0f, -2.2f, -1.0f);
+	glEnd();
+}
+
+void DrawingObject::drawArrangedWindow()
+{
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glPushMatrix();
+
+	glTranslatef(39.0f, 0.0f, 70.0f);
+	glPushMatrix();
+
+	glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
+	drawWindow();
+
+	glPopMatrix();
+
+	for (int i = 0; i < 7; i++)
+	{
+		glTranslatef(0.0f, 0.0f, -20.0f);
+		glPushMatrix();
+
+		glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
+		drawWindow();
+		glPopMatrix();
+	}
+}
+
+void DrawingObject::drawWindow()
+{
+	//glColor3f(0.0f, 0.5f, 1.0f);
+	//glBegin(GL_QUADS);
+	//glVertex3f(-1.0f, 1.5f, 0.0f);
+	//glVertex3f(-1.0f, -1.5f, 0.0f);
+	//glVertex3f(1.0f, -1.5f, 0.0f);
+	//glVertex3f(1.0f, 1.5f, 0.0f);
+	//glEnd();
+
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, windowTex);
+
+	glBegin(GL_QUADS);
+	glTexCoord2d(0, 1); glVertex3f(-5.0f, 7.5f, 0.0f);
+	glTexCoord2d(0, 0); glVertex3f(-5.0f, -7.5f, 0.0f);
+	glTexCoord2d(1, 0); glVertex3f(5.0f, -7.5f, 0.0f);
+	glTexCoord2d(1, 1); glVertex3f(5.0f, 7.5f, 0.0f);
+	glEnd();
+	glDisable(GL_TEXTURE_2D);
+}
+
+void DrawingObject::arrangeDesk()
+{
+	glPushMatrix();
+	drawDesk();
+
+	glTranslatef(-10.0f, 0.0f, 0.0f);
+	drawDesk();
+	glPopMatrix();
+
+	for (int i = 0; i < 8; i++)
+	{
+		// 다음줄
+		glTranslatef(0.0f, 0.0f, -15.0f);
+		glPushMatrix();
+		drawDesk();
+
+		glTranslatef(-10.0f, 0.0f, 0.0f);
+		drawDesk();
+		glPopMatrix();
+	}
+	glPopMatrix();
 }
 
 void DrawingObject::drawArrangedDesk()
@@ -202,72 +661,125 @@ void DrawingObject::drawArrangedDesk()
 
 	// 첫번째 왼쪽줄
 	glTranslatef(30.0f, -20.0f, 60.0f);
-	drawDesk();
-	glPushMatrix();
-
-	glTranslatef(-10.0f, 0.0f, 0.0f);
-	drawDesk();
-	glPopMatrix();
-
-	for (int i = 0; i < 8; i++)
-	{
-		// 다음줄
-		glTranslatef(0.0f, 0.0f, -15.0f);
-		drawDesk();
-		glPushMatrix();
-
-		glTranslatef(-10.0f, 0.0f, 0.0f);
-		drawDesk();
-		glPopMatrix();
-	}
-	glPopMatrix();
+	arrangeDesk();
 
 	glLoadIdentity();
 	// 첫번째 가운데 줄
 	glTranslatef(5.0f, -20.0f, 60.0f);
-	drawDesk();
+	arrangeDesk();
+
+	glLoadIdentity();
+	// 첫번째 오른쪽 줄??
+	glTranslatef(-20.0f, -20.0f, 60.0f);
+	arrangeDesk();
+	
+	glLoadIdentity();
 	glPushMatrix();
-
-	glTranslatef(-10.0f, 0.0f, 0.0f);
+	glTranslatef(25.0f, -20.0f, 70.0f);
+	glRotatef(180.0f, 0.0f, 1.0f, 0.0f);
 	drawDesk();
-	glPopMatrix();
 
-	for (int i = 0; i < 8; i++)
-	{
-		// 다음줄
-		glTranslatef(0.0f, 0.0f, -15.0f);
-		drawDesk();
-		glPushMatrix();
+	glPopMatrix();	
+}
 
-		glTranslatef(-10.0f, 0.0f, 0.0f);
-		drawDesk();
-		glPopMatrix();
-	}
-	glPopMatrix();
-
+void DrawingObject::drawArrangedMonitor()
+{
+	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	glPushMatrix();
 
-	// 첫번째 오른쪽 줄??
-	glTranslatef(-20.0f, -20.0f, 60.0f);
-	drawDesk();
+	glTranslatef(28.0f, -15.0f, 73.0f);
+	arrangeMonitor();
+
+	glLoadIdentity();
+	glTranslatef(3.0f, -15.0f, 73.0f);
+	arrangeMonitor();
+
+	glLoadIdentity();
+	glTranslatef(-23.0f, -15.0f, 73.0f);
+	arrangeMonitor();
+
+	glLoadIdentity();
+	glTranslatef(27.0f, -15.0f, 56.0f);
+	glRotatef(180.0f, 0.0f, 1.0f, 0.0f);
+	drawMonitor();
+
+	glPopMatrix();
+}
+
+void DrawingObject::arrangeMonitor()
+{
 	glPushMatrix();
+	drawMonitor();
 
 	glTranslatef(-10.0f, 0.0f, 0.0f);
-	drawDesk();
+	drawMonitor();
 	glPopMatrix();
 
 	for (int i = 0; i < 8; i++)
 	{
 		// 다음줄
 		glTranslatef(0.0f, 0.0f, -15.0f);
-		drawDesk();
 		glPushMatrix();
+		drawMonitor();
 
 		glTranslatef(-10.0f, 0.0f, 0.0f);
-		drawDesk();
+		drawMonitor();
 		glPopMatrix();
 	}
+	glPopMatrix();
+}
+
+void DrawingObject::drawMonitor()
+{
+	GLUquadricObj  *qobj;
+
+	qobj = gluNewQuadric(); //  Quadric 객체 속성 설정 함수
+	gluQuadricDrawStyle(qobj, GLU_FILL); // 포인터랑 속성을 설정해줄 인자를 넘긴다.
+	glPushMatrix();
+	glTranslatef(0.0f, 0.0f, -10.0f);
+	glColor3f(0.0f, 0.0f, 0.0f);
+
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, screenTex);
+
+	glBegin(GL_QUADS);
+	// 화면부분
+	glTexCoord2d(0, 1); glVertex3f(0.0f, 5.0f, 0.0f);
+	glTexCoord2d(0, 0); glVertex3f(0.0f, 0.0f, 0.0f);
+	glTexCoord2d(1, 0); glVertex3f(5.0f, 0.0f, 0.0f);
+	glTexCoord2d(1, 1); glVertex3f(5.0f, 5.0f, 0.0f);
+	glEnd();
+
+	glDisable(GL_TEXTURE_2D);
+
+	glBegin(GL_QUADS);
+	// 왼쪽면
+	glVertex3f(0.0f, 5.0f, 0.5f);
+	glVertex3f(0.0f, 0.0f, 0.5f);
+	glVertex3f(0.0f, 0.0f, 0.0f);
+	glVertex3f(0.0f, 5.0f, 0.0f);
+	// 윗면
+	glVertex3f(5.0f, 5.0f, 0.5f);
+	glVertex3f(0.0f, 5.0f, 0.5f);
+	glVertex3f(0.0f, 5.0f, 0.0f);
+	glVertex3f(5.0f, 5.0f, 0.0f);
+	// 오른쪽면
+	glVertex3f(5.0f, 5.0f, 0.0f);
+	glVertex3f(5.0f, 0.0f, 0.0f);
+	glVertex3f(5.0f, 0.0f, 0.5f);
+	glVertex3f(5.0f, 5.0f, 0.5f);
+	// 뒷면
+	glVertex3f(0.0f, 5.0f, 0.5f);
+	glVertex3f(0.0f, 0.0f, 0.5f);
+	glVertex3f(5.0f, 0.0f, 0.5f);
+	glVertex3f(5.0f, 5.0f, 0.5f);
+	glEnd();
+
+	glColor3f(0.9f, 0.9f, 0.9f);
+	glTranslatef(2.5f, 1.0f, 0.5f);
+	glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
+	gluCylinder(qobj, 0.5, 0.5, 1.5, 20, 10);
 	glPopMatrix();
 }
 
@@ -277,12 +789,17 @@ void DrawingObject::drawBoard()
 	glLoadIdentity();
 	glColor3f(1.0, 1.0, 1.0);
 
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, boardTex);
+
 	glBegin(GL_QUADS);
-	glVertex3f(-25.0f, -10.0f, 79.0f);
-	glVertex3f(25.0f, -10.0f, 79.0f);
-	glVertex3f(25.0f, 10.0f, 79.0f); 
-	glVertex3f(-25.0f, 10.0f, 79.0f);
+	glTexCoord2d(0, 0); glVertex3f(-25.0f, -10.0f, 79.0f);
+	glTexCoord2d(1, 0); glVertex3f(25.0f, -10.0f, 79.0f);
+	glTexCoord2d(1, 1); glVertex3f(25.0f, 10.0f, 79.0f);
+	glTexCoord2d(0, 1); glVertex3f(-25.0f, 10.0f, 79.0f);
 	glEnd();
+
+	glDisable(GL_TEXTURE_2D);
 }
 
 void DrawingObject::drawDesk()

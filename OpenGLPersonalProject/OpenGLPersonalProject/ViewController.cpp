@@ -2,7 +2,8 @@
 #include "DrawingManager.h"
 #include <math.h>
 #include <iostream>
-#define PI 3.141592
+#define PI 3.141592f
+
 using namespace std;
 // VCS ÃÊ±âÈ­, keyboard and reshape
 ViewController::ViewController()
@@ -18,8 +19,8 @@ void ViewController::ReshapeFunc(int w, int h)
 	glViewport(0, 0, window_width, window_height);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(fov, (GLfloat)window_width / (GLfloat)window_height, 1.0, 100.0);
-	gluLookAt(positionX, positionY, positionZ, focusX, focusY, focusZ, 0.0, 1.0, 0.0);
+	gluPerspective(fov, (GLfloat)window_width / (GLfloat)window_height, 1.0, 500.0);
+	gluLookAt(positionX, positionY, positionZ, positionX + focusX, positionY + focusY, positionZ + focusZ, 0.0, 1.0, 0.0);
 }
 
 void ViewController::SetView()
@@ -28,16 +29,18 @@ void ViewController::SetView()
 	focusZ = -cosf(rotation * PI / 180.0f);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(fov, (GLfloat)window_width / (GLfloat)window_height, 1.0, 100.0);
-	gluLookAt(positionX, positionY, positionZ, focusX, focusY, focusZ, 0.0, 1.0, 0.0);
+	gluPerspective(fov, (GLfloat)window_width / (GLfloat)window_height, 1.0, 500.0);
+	gluLookAt(positionX, positionY, positionZ, positionX + focusX, positionY + focusY, positionZ + focusZ, 0.0, 1.0, 0.0);
 }
 
 void ViewController::KeyboardFunc(unsigned char key, int x, int y)
 {
+	GLfloat termX, termZ;
+
 	switch (key)
 	{
-	case 'r':
-		rotation += 10.0f;
+	case 'd': case 'D':
+		rotation += 5.0f;
 		if (rotation > 360.0f)
 		{
 			rotation -= 360.0f;
@@ -45,8 +48,8 @@ void ViewController::KeyboardFunc(unsigned char key, int x, int y)
 
 		glutPostRedisplay();
 		break;
-	case 'l':
-		rotation -= 10.0f;
+	case 'a': case 'A':
+		rotation -= 5.0f;
 		if (rotation < 0.0f)
 		{
 			rotation += 360.0f;
@@ -54,11 +57,20 @@ void ViewController::KeyboardFunc(unsigned char key, int x, int y)
 
 		glutPostRedisplay();
 		break;
-	case 'i':
+	case 'w': case 'W':
+		termX = WALK_DISTANCE * sinf(-rotation * PI / 180.0f);
+		termZ = WALK_DISTANCE * cosf(-rotation * PI / 180.0f);
+		positionX -= termX;
+		positionZ -= termZ;
 		glutPostRedisplay();
 		break;
-	case 'o':
+	case 's': case 'S':
+		termX = WALK_DISTANCE * sinf(-rotation * PI / 180.0f);
+		termZ = WALK_DISTANCE * cosf(-rotation * PI / 180.0f);
+		positionX += termX;
+		positionZ += termZ;
 		glutPostRedisplay();
+	default:
 		break;
 	}
 }
