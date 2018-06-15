@@ -17,18 +17,9 @@ private :
 	GLfloat fov = 100.0f;
 	GLfloat focusX = 0.0f, focusY = 0.0f, focusZ = 0.0f;
 	GLfloat positionX = 0.0f, positionY = -10.0f, positionZ = 0.0f;
-	void moveForward();
-	void moveLeft();
-	void moveRight();
-	void moveBackward();
-	void rotateRight();
-	void rotateLeft();
-	void rotateUp();
-	void rotateBottom();
 public :
 	ViewController();
 	void ReshapeFunc(int w, int h);
 	void KeyboardFunc(unsigned char key, int x, int y);
-	void MousePassiveFunc(int x, int y); 
 	void SetView();
 };

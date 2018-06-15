@@ -98,6 +98,9 @@ void ViewController::KeyboardFunc(unsigned char key, int x, int y)
 		lightPosition[0] = newPositionX;
 		lightPosition[2] = newPositionZ;
 		glutPostRedisplay();
+		break;
+	case 27:
+		exit(0);
 	default:
 		break;
 	}

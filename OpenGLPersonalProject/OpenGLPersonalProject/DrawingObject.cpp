@@ -114,7 +114,7 @@ DrawingObject::DrawingObject()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); // minimum
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE/**/);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, STAND_WIDTH, STAND_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, standImage);
-	
+
 	glGenTextures(1, &blackTex);
 	glBindTexture(GL_TEXTURE_2D, blackTex);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -247,7 +247,7 @@ void DrawingObject::makeDeskImage(GLubyte image[][DESK_WIDTH][4])
 	{ 255, 181, 108 },
 	{ 255, 181, 108 } };
 
-	int color[8][3] = 
+	int color[8][3] =
 	{
 	{230, 230, 230},
 	{150, 150, 150},
@@ -345,7 +345,7 @@ void DrawingObject::makeDoorImage(GLubyte image[][DOOR_WIDTH][4])
 			{
 				c = 40;
 			}
-			
+
 			image[i][j][0] = (GLubyte)c;
 			image[i][j][1] = (GLubyte)c;
 			image[i][j][2] = (GLubyte)c;
@@ -373,7 +373,7 @@ void DrawingObject::makeBackStandImage(GLubyte image[][STAND_WIDTH][4])
 				color[1] = 200;
 				color[2] = 240;
 			}
-			
+
 
 			image[i][j][0] = (GLubyte)color[0];
 			image[i][j][1] = (GLubyte)color[1];
@@ -411,6 +411,41 @@ void DrawingObject::MyAnimation()
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, SCREEN_WIDTH, SCREEN_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, screenImage);
 
 
+	if (isShakingFront)
+	{
+		rightArmRotation += 1.0f;
+		leftArmRotation -= 1.0f;
+		if (rightArmRotation > 30.0f)
+		{
+			isShakingFront = false;
+		}
+	}
+	else if (!isShakingFront)
+	{
+		rightArmRotation -= 1.0f;
+		leftArmRotation += 1.0f;
+		if (leftArmRotation > 30.0f)
+		{
+			isShakingFront = true;
+		}
+	}
+
+	if (isPositiveDirection)
+	{
+		movementProf += 0.1f;
+		if (movementProf > 130.0f)
+		{
+			isPositiveDirection = false;
+		}
+	}
+	else if (!isPositiveDirection)
+	{
+		movementProf -= 0.1f;
+		if (movementProf < 0.0f)
+		{
+			isPositiveDirection = true;
+		}
+	}
 }
 
 // glutDisplayFunc()의 패러미터메소드
@@ -428,7 +463,7 @@ void DrawingObject::MyDisplayFunc()
 	drawProjector();
 	drawArrangedMonitor();
 	drawBackStand();
-	drawProf();
+	drawMovingProf();
 
 	glutSwapBuffers();
 }
@@ -439,7 +474,7 @@ void DrawingObject::drawBackStand()
 	glLoadIdentity();
 
 	glColor3f(0.0f, 0.0f, 0.0f);
-	
+
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, standTex);
 
@@ -568,7 +603,7 @@ void DrawingObject::drawArrangedChair()
 }
 
 void DrawingObject::drawChair()
-{	
+{
 	glColor3f(0.0f, 0.0f, 0.0f);
 
 	glBegin(GL_QUADS);
@@ -693,14 +728,14 @@ void DrawingObject::drawArrangedDesk()
 	// 첫번째 오른쪽 줄??
 	glTranslatef(-20.0f, -20.0f, 60.0f);
 	arrangeDesk();
-	
+
 	glLoadIdentity();
 	glPushMatrix();
 	glTranslatef(25.0f, -20.0f, 70.0f);
 	glRotatef(180.0f, 0.0f, 1.0f, 0.0f);
 	drawDesk();
 
-	glPopMatrix();	
+	glPopMatrix();
 }
 
 void DrawingObject::drawArrangedMonitor()
@@ -922,53 +957,97 @@ void DrawingObject::drawRoom()
 	glPopMatrix();
 }
 
-
-
-void DrawingObject::drawProf()
+void DrawingObject::drawMovingProf()
 {
-	GLUquadricObj  *qobj;
-	qobj = gluNewQuadric();
-	gluQuadricDrawStyle(qobj, GLU_FILL);
-
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
 	glPushMatrix();
-	glTranslatef(0.0f, -11.0f, 0.0f);
+	// 현재 위치
+	glTranslatef(13.0f, -11.0f, 70.0f);
+	glTranslatef(0.0f, 0.0f, -movementProf);
+	drawProf();
+}
+
+void DrawingObject::drawProf()
+{
+	GLfloat mat_diffuse[] = { 0.3, 0.3, 0.3, 0.6 };
+	GLfloat mat_emission[] = { 0.0, 0.0, 0.0, 0.3 };
+
+	GLUquadricObj  *qobj;
+	qobj = gluNewQuadric();
+	gluQuadricDrawStyle(qobj, GLU_FILL);
+
+	glEnable(GL_BLEND);
+	glDepthMask(GL_TRUE);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	glMaterialfv(GL_FRONT, GL_EMISSION, mat_emission);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
+
 	glPushMatrix();
 	// 얼굴, 몸
 	glutSolidSphere(1.0f, 50, 50);
 	glTranslatef(0.0f, -1.0f, 0.0f);
 	glPushMatrix();
 	glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
-	gluCylinder(qobj, 0.5, 0.5, 4.0, 20, 5);
+	gluCylinder(qobj, 0.5, 0.5, 4.0, 20, 1);
 	glPopMatrix();
+
+	//movement
+	glPopMatrix();
+	glPushMatrix();
+	glRotatef(leftArmRotation, 1.0f, 0.0f, 0.0f);
+	glTranslatef(0.0f, -1.0f, 0.0f);
+
 	// 왼팔
 	glPushMatrix();
 	glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
 	glRotatef(70.0f, 1.0f, 0.0f, 0.0f);
-	gluCylinder(qobj, 0.3, 0.3, 4.0, 20, 5);
+	gluCylinder(qobj, 0.3, 0.3, 4.0, 20, 1);
 	glPopMatrix();
+
+	// movement
+	glPopMatrix();
+	glPushMatrix();
+	glRotatef(rightArmRotation, 1.0f, 0.0f, 0.0f);
+	glTranslatef(0.0f, -1.0f, 0.0f);
+
 	// 오른팔
 	glPushMatrix();
 	glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
 	glRotatef(110.0f, 1.0f, 0.0f, 0.0f);
-	gluCylinder(qobj, 0.3, 0.3, 4.0, 20, 5);
+	gluCylinder(qobj, 0.3, 0.3, 4.0, 20, 1);
 	glPopMatrix();
 
+	// movement
+	glPopMatrix();
+	glPushMatrix();
+	glTranslatef(0.0f, -1.0f, 0.0f);
+	// 왼쪽 다리
 	glTranslatef(0.05, -4.0f, 0.0f);
+	glRotatef(rightArmRotation, 1.0f, 0.0f, 0.0f);
 	glPushMatrix();
 	glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
 	glRotatef(80.0f, 1.0f, 0.0f, 0.0f);
-	gluCylinder(qobj, 0.3, 0.3, 4.0, 20, 5);
+	gluCylinder(qobj, 0.3, 0.3, 4.0, 20, 1);
 	glPopMatrix();
 
+	// movement
+	glPopMatrix();
+	glPushMatrix();
+	glTranslatef(0.0f, -1.0f, 0.0f);
+	// 오른쪽 다리
+	glTranslatef(0.05, -4.0f, 0.0f);
+	glRotatef(leftArmRotation, 1.0f, 0.0f, 0.0f);
 	glPushMatrix();
 	glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
 	glRotatef(100.0f, 1.0f, 0.0f, 0.0f);
-	gluCylinder(qobj, 0.3, 0.3, 4.0, 20, 5);
+	gluCylinder(qobj, 0.3, 0.3, 4.0, 20, 1);
 	glPopMatrix();
 
 	glPopMatrix();
 	glPopMatrix();
+
+	glDisable(GL_BLEND);
 }

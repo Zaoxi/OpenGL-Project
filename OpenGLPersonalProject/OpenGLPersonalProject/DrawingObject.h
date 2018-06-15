@@ -66,6 +66,14 @@ private :
 	GLfloat mat_diffuse[4] = { 0.25f, 0.25f, 1.0f, 0.0f };
 	GLfloat mat_specular[4] = { 1.0f, 1.0f, 1.0f, 0.0f };
 
+	GLfloat rightArmRotation = 0.0f;
+	bool isShakingFront = true;
+
+	GLfloat leftArmRotation = 0.0f;
+
+	GLfloat movementProf = 0.0f;
+	bool isPositiveDirection = true;
+
 	// Method For Making Texture
 	void makeFloorImage(GLubyte image[][FLOOR_WIDTH][4]);
 	void makeWallSideImage(GLubyte image[][WALL_SIDE_WIDTH][4]);

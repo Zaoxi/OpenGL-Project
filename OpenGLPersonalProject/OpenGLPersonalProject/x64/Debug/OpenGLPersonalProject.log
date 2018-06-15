@@ -1,3 +1,6 @@
-﻿  DrawingObject.cpp
-d:\project\openglproject\opengl-project\openglpersonalproject\openglpersonalproject\drawingobject.cpp(957): warning C4305: '인수': 'double'에서 'GLfloat'(으)로 잘립니다.
+﻿  main.cpp
+d:\project\openglproject\opengl-project\openglpersonalproject\openglpersonalproject\main.cpp(3): warning C4005: 'WINDOW_WIDTH': 매크로 재정의
+  d:\project\openglproject\opengl-project\openglpersonalproject\openglpersonalproject\drawingobject.h(17): note: 'WINDOW_WIDTH'의 이전 정의를 참조하십시오.
+d:\project\openglproject\opengl-project\openglpersonalproject\openglpersonalproject\main.cpp(4): warning C4005: 'WINDOW_HEIGHT': 매크로 재정의
+  d:\project\openglproject\opengl-project\openglpersonalproject\openglpersonalproject\drawingobject.h(18): note: 'WINDOW_HEIGHT'의 이전 정의를 참조하십시오.
   OpenGLPersonalProject.vcxproj -> D:\Project\OpenGLProject\OpenGL-Project\OpenGLPersonalProject\x64\Debug\OpenGLPersonalProject.exe
